@@ -11,6 +11,7 @@ from model import RobertaForSequenceClassification, BertForSequenceClassificatio
 from evaluation import evaluate_ood
 import wandb
 import warnings
+import pickle
 from data import load
 warnings.filterwarnings("ignore")
 
@@ -154,17 +155,8 @@ def main():
         )
         model.to(0)
 
-    datasets = ['rte', 'sst2', 'mnli', '20ng', 'trec', 'imdb', 'wmt16', 'multi30k']
-    benchmarks = ()
-
-    for dataset in datasets:
-        if dataset == args.task_name:
-            train_dataset, dev_dataset, test_dataset = load(dataset, tokenizer, max_seq_length=args.max_seq_length, is_id=True)
-        else:
-            _, _, ood_dataset = load(dataset, tokenizer, max_seq_length=args.max_seq_length)
-            benchmarks = (('ood_' + dataset, ood_dataset),) + benchmarks
+    (train_dataset, dev_dataset, test_dataset, benchmarks) = pickle.load(open("/content/drive/MyDrive/ContraOOD_dataset/bert_" + args.task_name + ".pickle", "wb"))
     train(args, model, train_dataset, dev_dataset, test_dataset, benchmarks)
-
 
 if __name__ == "__main__":
     main()
