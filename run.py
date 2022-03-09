@@ -160,7 +160,7 @@ def main():
         )
         model.to(0)
 
-    (train_dataset, dev_dataset, test_dataset, benchmarks) = pickle.load(open("/content/drive/MyDrive/ContraOOD_dataset/bert_" + args.task_name + ".pickle", "wb"))
+    (train_dataset, dev_dataset, test_dataset, benchmarks) = pickle.load(open("/content/drive/MyDrive/ContraOOD_dataset/bert_" + args.task_name + ".pickle", "rb"))
     train(args, model, train_dataset, dev_dataset, test_dataset, benchmarks)
 
 if __name__ == "__main__":
