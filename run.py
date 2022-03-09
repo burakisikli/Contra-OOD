@@ -9,7 +9,7 @@ from utils import set_seed, collate_fn
 from datasets import load_metric
 from model import RobertaForSequenceClassification, BertForSequenceClassification
 from evaluation import evaluate_ood
-import wandb
+#import wandb
 import warnings
 import pickle
 from data import load
@@ -54,7 +54,8 @@ def train(args, model, train_dataset, dev_dataset, test_dataset, benchmarks):
         model.prepare_ood(dev_dataloader)
         for tag, ood_features in benchmarks:
             results = evaluate_ood(args, model, test_dataset, ood_features, tag=tag)
-            wandb.log(results, step=num_steps)
+            #wandb.log(results, step=num_steps)
+            print(results)
 
     num_steps = 0
     for epoch in range(int(args.num_train_epochs)):
@@ -69,13 +70,17 @@ def train(args, model, train_dataset, dev_dataset, test_dataset, benchmarks):
             optimizer.step()
             scheduler.step()
             model.zero_grad()
-            wandb.log({'loss': loss.item()}, step=num_steps)
-            wandb.log({'cos_loss': cos_loss.item()}, step=num_steps)
+            #wandb.log({'loss': loss.item()}, step=num_steps)
+            print(loss.item())
+            #wandb.log({'cos_loss': cos_loss.item()}, step=num_steps)
+            print(cos_loss.item())
 
         results = evaluate(args, model, dev_dataset, tag="dev")
-        wandb.log(results, step=num_steps)
+        #wandb.log(results, step=num_steps)
+        print(results)
         results = evaluate(args, model, test_dataset, tag="test")
-        wandb.log(results, step=num_steps)
+        #wandb.log(results, step=num_steps)
+        print(results)
         detect_ood()
 
 
@@ -126,7 +131,7 @@ def main():
     parser.add_argument("--loss", type=str, default="margin")
     args = parser.parse_args()
 
-    wandb.init(project=args.project_name, name=args.task_name + '-' + str(args.alpha) + "_" + args.loss)
+    #wandb.init(project=args.project_name, name=args.task_name + '-' + str(args.alpha) + "_" + args.loss)
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     args.n_gpu = torch.cuda.device_count()
