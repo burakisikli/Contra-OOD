@@ -71,9 +71,9 @@ def train(args, model, train_dataset, dev_dataset, test_dataset, benchmarks):
             scheduler.step()
             model.zero_grad()
             #wandb.log({'loss': loss.item()}, step=num_steps)
-            print(loss.item())
+            #print(loss.item())
             #wandb.log({'cos_loss': cos_loss.item()}, step=num_steps)
-            print(cos_loss.item())
+            #print(cos_loss.item())
 
         results = evaluate(args, model, dev_dataset, tag="dev")
         #wandb.log(results, step=num_steps)
